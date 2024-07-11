@@ -22,19 +22,36 @@ class Bot:
     """
 
     def __init__(self):
-        self.team = "TeamName"  # This is your team name
+        self.team = "nezhar"  # This is your team name
         # This is the course that the ship has to follow
         self.course = [
             Checkpoint(latitude=43.797109, longitude=-11.264905, radius=50),
-            Checkpoint(longitude=-29.908577, latitude=17.999811, radius=50),
-            Checkpoint(latitude=-11.441808, longitude=-29.660252, radius=50),
-            Checkpoint(longitude=-63.240264, latitude=-61.025125, radius=50),
+            Checkpoint(latitude=17.440436, longitude=-64.387514, radius=50),
+            Checkpoint(latitude=11.264407, longitude=-80.741149, radius=50),
+            Checkpoint(latitude=9.817736, longitude=-80.405538, radius=5),
+            Checkpoint(latitude=7.764715, longitude=-78.767019, radius=50),
+            Checkpoint(latitude=6.042875, longitude=-79.787996, radius=50),
             Checkpoint(latitude=2.806318, longitude=-168.943864, radius=1990.0),
-            Checkpoint(latitude=-62.052286, longitude=169.214572, radius=50.0),
+            Checkpoint(latitude=-2.376610, longitude=159.575564, radius=50),
+            Checkpoint(latitude=5.821937, longitude=129.145979, radius=50.0),
+            Checkpoint(latitude=-0.417495, longitude=125.916342, radius=5.0),
+            Checkpoint(latitude=-4.965513, longitude=128.122865, radius=5.0),
+            Checkpoint(latitude=-10.141710, longitude=129.713751, radius=5.0),
             Checkpoint(latitude=-15.668984, longitude=77.674694, radius=1190.0),
-            Checkpoint(latitude=-39.438937, longitude=19.836265, radius=50.0),
-            Checkpoint(latitude=14.881699, longitude=-21.024326, radius=50.0),
-            Checkpoint(latitude=44.076538, longitude=-18.292936, radius=50.0),
+            Checkpoint(latitude=13.768042, longitude=51.559097, radius=50),
+            Checkpoint(latitude=12.246341, longitude=43.582764, radius=5),
+            Checkpoint(latitude=27.493460, longitude=34.514343, radius=50),
+            Checkpoint(latitude=28.307254, longitude=33.394979, radius=5),
+            Checkpoint(latitude=29.066118, longitude=32.946602, radius=5),
+            Checkpoint(latitude=29.566118, longitude=32.646602, radius=5),
+            Checkpoint(latitude=30.079812, longitude=32.469881, radius=5),
+            Checkpoint(latitude=30.724427, longitude=32.431557, radius=5),
+            Checkpoint(latitude=32.522225, longitude=32.461793, radius=5),
+            Checkpoint(latitude=36.332412, longitude=14.797698, radius=50),
+            Checkpoint(latitude=38.278835, longitude=8.499950, radius=50),
+            Checkpoint(latitude=35.992628, longitude=-5.406221, radius=5),
+            Checkpoint(latitude=36.943703, longitude=-10.866803, radius=5),
+            Checkpoint(latitude=46.797109, longitude=-11.264905, radius=5),
             Checkpoint(
                 latitude=config.start.latitude,
                 longitude=config.start.longitude,
@@ -102,13 +119,6 @@ class Bot:
         # Initialize the instructions
         instructions = Instructions()
 
-        # TODO: Remove this, it's only for testing =================
-        current_position_forecast = forecast(
-            latitudes=latitude, longitudes=longitude, times=0
-        )
-        current_position_terrain = world_map(latitudes=latitude, longitudes=longitude)
-        # ===========================================================
-
         # Go through all checkpoints and find the next one to reach
         for ch in self.course:
             # Compute the distance to the checkpoint
@@ -118,12 +128,8 @@ class Bot:
                 longitude2=ch.longitude,
                 latitude2=ch.latitude,
             )
-            # Consider slowing down if the checkpoint is close
-            jump = dt * np.linalg.norm(speed)
-            if dist < 2.0 * ch.radius + jump:
-                instructions.sail = min(ch.radius / jump, 1)
-            else:
-                instructions.sail = 1.0
+            instructions.sail = 1.0
+
             # Check if the checkpoint has been reached
             if dist < ch.radius:
                 ch.reached = True
